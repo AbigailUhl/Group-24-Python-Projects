@@ -2,7 +2,7 @@
 
 ## Group Members
 - Name 1 – Abigail Uhl
-- Name 2 – ID
+- Name 2 – Larry Shi
 - Name 3 – ID
 - Name 4 – ID
 
