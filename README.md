@@ -3,7 +3,7 @@
 ## Group Members
 - Name 1 – Abigail Uhl
 - Name 2 – Larry Shi
-- Name 3 – ID
+- Name 3 – Nicolas Walker
 - Name 4 – ID
 
 ## Project Title
