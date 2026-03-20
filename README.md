@@ -4,7 +4,7 @@
 - Name 1 – Abigail Uhl
 - Name 2 – Larry Shi
 - Name 3 – Nicolas Walker
-- Name 4 – ID
+- Name 4 – Harsh Thakor
 
 ## Project Title
 Titanic Passenger Survival Analysis
