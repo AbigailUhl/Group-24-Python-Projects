@@ -1,0 +1,35 @@
+#Survival rates by passenger class
+df_classSurvivalRates = df.copy()
+df_classSurvivalRates = df_classSurvivalRates.groupby("Survived")["Pclass"].mean()
+
+plt.figure(figsize=(6,4))
+sns.boxplot(data=df, x="Survived", y="Fare")
+plt.title("Passenger class by Survival")
+plt.xlabel("Survival rate")
+plt.ylabel("Passenger class")
+plt.show()
+
+#rate of passenger classes within those who survived
+df_survivors=df.copy()
+df_survivors = df[df["Survived"]==1]
+
+class_counts = df_survivors["Pclass"].value_counts()
+class_percentages = df_survivors["Pclass"].value_counts(normalize=True) * 100
+
+survivor_class_percentage = (
+    df_survivors["Pclass"]
+    .value_counts(normalize=True)
+    .mul(100)
+    .round(2)
+    .sort_index()
+)
+
+plt.figure(figsize=(6,4))
+sns.barplot(x=survivor_class_percentage.index, y=survivor_class_percentage.values)
+
+plt.title("Percentage of Each Class Among Survivors")
+plt.xlabel("Passenger Class")
+plt.ylabel("Percentage (%)")
+
+plt.savefig("figures/survivor_class_percentage.png", dpi=300)
+plt.show()
