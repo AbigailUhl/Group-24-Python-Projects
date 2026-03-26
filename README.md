@@ -24,10 +24,10 @@ This dataset satisfies all project requirements:
 - Represents a **real-world context** involving sports performance and analytics  
 
 ## Research Questions
-1. Which nationalities have the highest average player ratings?
-2. How are player ratings distributed across the dataset?
-3. How does average player rating change with age?
-4. Is there a relationship between player speed and overall rating?
+1. How do player physical attributes (speed and strength) change with age? (Line Plot)
+2. Which positions have the highest average speed? (Bar Plot)
+3. What is the distribution of player strength? (Histogram)
+4. What is the relationship between dribbling ability and ball control? (Scatter Plot)
 
 ## Repo Structure
 - `data/raw/` → original dataset
