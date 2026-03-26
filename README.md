@@ -25,8 +25,8 @@ This dataset satisfies all project requirements:
 
 ## Research Questions
 1. How do player physical attributes (speed and strength) change with age? (Line Plot)
-2. Which positions have the highest average speed? (Bar Plot)
-3. What is the distribution of player strength? (Histogram)
+2. Which club positions have the highest average speed? (Bar Plot)
+3. What is the distribution of player ratings? (Histogram)
 4. What is the relationship between dribbling ability and ball control? (Scatter Plot)
 
 ## Repo Structure
