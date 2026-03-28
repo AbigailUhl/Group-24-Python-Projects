@@ -2,16 +2,14 @@
 # FIFA Player Data Storytelling Project
 
 ## Group Members
-- Name 1 – Abigail Uhl
-    ID - ATU22
-- Name 2 – Larry Shi
-- Name 3 – Nicolas Walker
-- Name 4 – Harsh Thakor
+- Abigail Uhl - ID: ATU22
+- Larry Shi
+- Nicolas Walker
+- Harsh Thakor
 
 ## Project Description
-This project explores the Titanic passenger dataset to understand which passenger characteristics were most associated with survival. We use pandas, NumPy, matplotlib, and seaborn to clean, transform, summarize, and visualize the data in order to tell a clear data story for a non-technical audience.
+This project analyzes a real-world FIFA soccer player dataset in the 2017 game to uncover patterns and relationships between player characteristics and overall performance ratings. The goal is to use data cleaning, transformation, statistical analysis, and visualization techniques to tell a meaningful data story. Using pandas, NumPy, matplotlib, and seaborn, we clean, transform, summarize, and visualize the data. By exploring variables, this project identifies trends that help explain what factors are associated with higher-rated players.
 
-This project analyzes a real-world FIFA soccer player dataset in the 2017 game to uncover patterns and relationships between player characteristics and overall performance ratings. The goal is to use data cleaning, transformation, statistical analysis, and visualization techniques to tell a meaningful data story. By exploring variables, this project identifies trends that help explain what factors are associated with higher-rated players.
 
 ## Dataset Source
 - FIFA 2017 Player dataset source: https://www.kaggle.com/datasets/artimous/complete-fifa-2017-player-dataset-global
@@ -20,7 +18,7 @@ This project analyzes a real-world FIFA soccer player dataset in the 2017 game t
 This dataset satisfies all project requirements:
 - Contains more than 500 rows and fewer than 50,000 rows  
 - Includes numerous **numeric columns** (e.g., Rating, Age, Dribbling, Speed, Strength)  
-- Includes multiple **categorical columns** (e.g., Nationality, Club, Preferred Foot)  
+- Includes multiple **categorical columns** (e.g., Nationality, Club, Position)  
 - Represents a **real-world context** involving sports performance and analytics  
 
 ## Research Questions
@@ -36,4 +34,5 @@ This dataset satisfies all project requirements:
 - `figures/` → exported plots
 
 ## Team Workflow
-We used GitHub to organize the project, commit regularly, and divide work across cleaning, analysis, visualization, and documentation.
+We used GitHub to organize the project, commit regularly, and submit work across cleaning, analysis, visualization, and documentation.
+
