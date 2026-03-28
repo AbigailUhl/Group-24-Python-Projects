@@ -5,7 +5,7 @@
 - Abigail Uhl - ID: ATU22
 - Larry Shi
 - Nicolas Walker
-- Harsh Thakor
+- Harsh Thakor - ID: HJT24B
 
 ## Project Description
 This project analyzes a real-world FIFA soccer player dataset in the 2017 game to uncover patterns and relationships between player characteristics and overall performance ratings. The goal is to use data cleaning, transformation, statistical analysis, and visualization techniques to tell a meaningful data story. Using pandas, NumPy, matplotlib, and seaborn, we clean, transform, summarize, and visualize the data. By exploring variables, this project identifies trends that help explain what factors are associated with higher-rated players.
