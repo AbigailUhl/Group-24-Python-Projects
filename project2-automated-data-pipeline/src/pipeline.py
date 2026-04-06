@@ -1,5 +1,7 @@
 import requests
 import pandas as pd
+from pathlib import Path
+from datetime import datetime
 
 BASE_URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -8,7 +10,6 @@ cities = {
     "Miami": {"latitude": 25.7617, "longitude": -80.1918},
     "Atlanta": {"latitude": 33.7490, "longitude": -84.3880}
 }
-
 all_results = []
 
 for city, coords in cities.items():
@@ -44,7 +45,10 @@ for city, coords in cities.items():
         print(f"Request failed for {city}: {e}")
 
 df = pd.DataFrame(all_results)
-df.to_csv("../data/processed/weather_data.csv", index=False)
+OUTPUT_FILE = Path("data/processed/weather_data.csv")
+OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
-print("CSV saved successfully.")
-print("Total rows:", len(df))
+if OUTPUT_FILE.exists():
+    df.to_csv(OUTPUT_FILE, mode="a", header=False, index=False)
+else:
+    df.to_csv(OUTPUT_FILE, index=False)
