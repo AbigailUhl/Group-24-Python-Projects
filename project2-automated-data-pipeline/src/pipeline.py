@@ -56,6 +56,15 @@ def fetch_weather_data(city, coords):
 
     return results
 
+def save_to_csv(df, output_file):
+    if df.empty:
+        return
+
+    if output_file.exists():
+        df.to_csv(output_file, mode="a", header=False, index=False)
+    else:
+        df.to_csv(output_file, index=False)
+
 def main():
     all_results = []
 
@@ -63,11 +72,7 @@ def main():
         all_results.extend(fetch_weather_data(city, coords))
 
     df = pd.DataFrame(all_results)
-
-    if OUTPUT_FILE.exists():
-        df.to_csv(OUTPUT_FILE, mode="a", header=False, index=False)
-    else:
-        df.to_csv(OUTPUT_FILE, index=False)
+    save_to_csv(df, OUTPUT_FILE)
 
 if __name__ == "__main__":
     main()
