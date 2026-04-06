@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from pathlib import Path
+from datetime import datetime
 
 BASE_URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -25,13 +26,19 @@ def fetch_weather_data(city, coords):
 
     try:
         response = requests.get(BASE_URL, params=params, timeout=10)
-        response.raise_for_status() 
+        print(f"{city}: {response.status_code}")
+        
+        if response.status_code != 200:
+            print(f"Error for {city}: {response.text}")
 
+        response.raise_for_status() 
         data = response.json()
         daily = data["daily"]
 
+        run_timestamp = datetime.now().isoformat()
         for i in range(len(daily["time"])):
             row = {
+                "run_timestamp": run_timestamp,
                 "city": city,
                 "date": daily["time"][i],
                 "temperature_max": daily["temperature_2m_max"][i],
