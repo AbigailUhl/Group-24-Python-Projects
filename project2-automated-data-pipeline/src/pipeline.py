@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 
 BASE_URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -18,20 +19,32 @@ for city, coords in cities.items():
         "timezone": "auto"
     }
 
-    response = requests.get(BASE_URL, params=params, timeout=10)
-    data = response.json()
-    daily = data["daily"]
+    try:
+        response = requests.get(BASE_URL, params=params, timeout=10)
+        response.raise_for_status()  # raises error if status is not 200
 
-    for i in range(len(daily["time"])):
-        row = {
-            "city": city,
-            "date": daily["time"][i],
-            "temperature_max": daily["temperature_2m_max"][i],
-            "temperature_min": daily["temperature_2m_min"][i],
-            "precipitation_sum": daily["precipitation_sum"][i],
-            "wind_speed_max": daily["wind_speed_10m_max"][i]
-        }
-        all_results.append(row)
+        data = response.json()
+        daily = data["daily"]
 
-for row in all_results:
-    print(row)
+        for i in range(len(daily["time"])):
+            row = {
+                "city": city,
+                "date": daily["time"][i],
+                "temperature_max": daily["temperature_2m_max"][i],
+                "temperature_min": daily["temperature_2m_min"][i],
+                "precipitation_sum": daily["precipitation_sum"][i],
+                "wind_speed_max": daily["wind_speed_10m_max"][i]
+            }
+            all_results.append(row)
+
+    except requests.exceptions.Timeout:
+        print(f"Request timed out for {city}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed for {city}: {e}")
+
+df = pd.DataFrame(all_results)
+df.to_csv("../data/processed/weather_data.csv", index=False)
+
+print("CSV saved successfully.")
+print("Total rows:", len(df))
