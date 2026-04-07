@@ -31,9 +31,12 @@ def fetch_weather_data(city, coords):
             response = requests.get(BASE_URL, params=params, timeout=10)
             print(f"{city}: {response.status_code}")
 
-            response.raise_for_status()
-            data = response.json()
-            break 
+            if response.status_code == 200:
+                data = response.json()
+                break
+            else:
+                print(f"{city}: request failed with status {response.status_code}")
+                response.raise_for_status()
 
         except requests.exceptions.Timeout:
             print(f"{city}: timeout on attempt {attempt + 1}")
