@@ -21,63 +21,46 @@ def fetch_weather_data(city, coords):
             "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
             "timezone": "auto"
     }
-     
     results = []
+    max_retries = 2
+    data = None
 
-    try:
-        max_retries = 2
-        for attempt in range(max_retries):
-            try:
-                response = requests.get(BASE_URL, params=params, timeout=10)
-                print(f"{city}: {response.status_code}")
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(BASE_URL, params=params, timeout=10)
+            print(f"{city}: {response.status_code}")
 
-                response.raise_for_status()
-                data = response.json()
-                break  # success → exit loop
+            response.raise_for_status()
+            data = response.json()
+            break  # success → exit loop
 
-            except requests.exceptions.Timeout:
-                print(f"{city}: timeout on attempt {attempt + 1}")
+        except requests.exceptions.Timeout:
+            print(f"{city}: timeout on attempt {attempt + 1}")
 
-            except requests.exceptions.RequestException as e:
-                print(f"{city}: error on attempt {attempt + 1} → {e}")
+        except requests.exceptions.RequestException as e:
+            print(f"{city}: error on attempt {attempt + 1} → {e}")
 
-            else:
-                # runs if all retries fail
-                print(f"{city}: failed after {max_retries} attempts")
-                return []
-            
-        """response = requests.get(BASE_URL, params=params, timeout=10)
-        print(f"{city}: {response.status_code}")
-        
-        if response.status_code != 200:
-            print(f"Error for {city}: {response.text}")
+    if data is None:
+        print(f"{city}: failed after {max_retries} attempts")
+        return []
+     
+    daily = data["daily"]
+    if not daily:
+        print(f"No daily data for {city}")
+        return []
 
-        response.raise_for_status() 
-        data = response.json()"""
-
-        daily = data["daily"]
-        if not daily:
-            print(f"No daily data for {city}")
-            return []
-
-        run_timestamp = datetime.now().isoformat()
-        for i in range(len(daily["time"])):
-            row = {
-                "run_timestamp": run_timestamp,
-                "city": city,
-                "date": daily["time"][i],
-                "temperature_max": daily["temperature_2m_max"][i],
-                "temperature_min": daily["temperature_2m_min"][i],
-                "precipitation_sum": daily["precipitation_sum"][i],
-                "wind_speed_max": daily["wind_speed_10m_max"][i]
-            }
-            results.append(row)
-
-    except requests.exceptions.Timeout:
-        print(f"Request timed out for {city}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed for {city}: {e}")
+    run_timestamp = datetime.now().isoformat()
+    for i in range(len(daily["time"])):
+        row = {
+            "run_timestamp": run_timestamp,
+            "city": city,
+            "date": daily["time"][i],
+            "temperature_max": daily["temperature_2m_max"][i],
+            "temperature_min": daily["temperature_2m_min"][i],
+            "precipitation_sum": daily["precipitation_sum"][i],
+            "wind_speed_max": daily["wind_speed_10m_max"][i]
+        }
+        results.append(row)
 
     return results
 
