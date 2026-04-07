@@ -25,15 +25,40 @@ def fetch_weather_data(city, coords):
     results = []
 
     try:
-        response = requests.get(BASE_URL, params=params, timeout=10)
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                response = requests.get(BASE_URL, params=params, timeout=10)
+                print(f"{city}: {response.status_code}")
+
+                response.raise_for_status()
+                data = response.json()
+                break  # success → exit loop
+
+            except requests.exceptions.Timeout:
+                print(f"{city}: timeout on attempt {attempt + 1}")
+
+            except requests.exceptions.RequestException as e:
+                print(f"{city}: error on attempt {attempt + 1} → {e}")
+
+            else:
+                # runs if all retries fail
+                print(f"{city}: failed after {max_retries} attempts")
+                return []
+            
+        """response = requests.get(BASE_URL, params=params, timeout=10)
         print(f"{city}: {response.status_code}")
         
         if response.status_code != 200:
             print(f"Error for {city}: {response.text}")
 
         response.raise_for_status() 
-        data = response.json()
+        data = response.json()"""
+
         daily = data["daily"]
+        if not daily:
+            print(f"No daily data for {city}")
+            return []
 
         run_timestamp = datetime.now().isoformat()
         for i in range(len(daily["time"])):
