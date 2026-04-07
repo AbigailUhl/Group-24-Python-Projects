@@ -11,7 +11,8 @@ CITIES = {
     "Atlanta": {"latitude": 33.7490, "longitude": -84.3880}
 }
 
-OUTPUT_FILE = Path("data/processed/weather_data.csv")
+BASE_DIR = Path(__file__).resolve().parent.parent
+OUTPUT_FILE = BASE_DIR / "data/processed/weather_data.csv"
 OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 def fetch_weather_data(city, coords):
@@ -32,7 +33,7 @@ def fetch_weather_data(city, coords):
 
             response.raise_for_status()
             data = response.json()
-            break  # success → exit loop
+            break 
 
         except requests.exceptions.Timeout:
             print(f"{city}: timeout on attempt {attempt + 1}")
@@ -50,6 +51,7 @@ def fetch_weather_data(city, coords):
         return []
 
     run_timestamp = datetime.now().isoformat()
+
     for i in range(len(daily["time"])):
         row = {
             "run_timestamp": run_timestamp,
@@ -61,7 +63,6 @@ def fetch_weather_data(city, coords):
             "wind_speed_max": daily["wind_speed_10m_max"][i]
         }
         results.append(row)
-
     return results
 
 def save_to_csv(df, output_file):
