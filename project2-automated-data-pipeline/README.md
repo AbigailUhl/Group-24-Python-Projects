@@ -34,7 +34,6 @@ We chose the Open-Meteo API because:
 - Append new data on each run instead of overwriting  
 - Handle API errors gracefully without crashing  
 
-
 ## Project Structure
 project-root/
 │
@@ -46,12 +45,23 @@ project-root/
 │ └── weather_data.csv
 
 ## How to Run the Pipeline
-python3 src/pipeline.py
+1. Ensure you are in project folder project2-automated-data-pipeline
 
-## Data Output
-File: data/processed/weather_data.csv
-Format: CSV
-Behavior: Appends new rows each time the script is run
+2. python3 src/pipeline.py
+
+## Example Run
+Command:
+```bash
+python3 src/pipeline.py
+```
+
+Example Output:
+```
+Tallahassee: 200
+Miami: 200
+Atlanta: 200
+Appended 21 rows to data/processed/weather_data.csv
+```
 
 ## Columns
 run_timestamp
