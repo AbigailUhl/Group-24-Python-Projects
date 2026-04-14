@@ -1,0 +1,54 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Player Records{% endblock %}
+
+{% block content %}
+<h1>Player Records</h1>
+
+{% if page_obj %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Nationality</th>
+            <th>Team</th>
+            <th>Rating</th>
+            <th>Age</th>
+            <th>Level</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in page_obj %}
+        <tr>
+            <td>{{ record.id }}</td>
+            <td>{{ record.name }}</td>
+            <td>{{ record.nationality }}</td>
+            <td>{{ record.team }}</td>
+            <td>{{ record.rating }}</td>
+            <td>{{ record.age }}</td>
+            <td>{{ record.player_level }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No records found.</p>
+{% endif %}
+
+<br>
+
+<div>
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+</div>
+{% endblock %}
