@@ -5,6 +5,10 @@
 {% block content %}
 <h1>Player Records</h1>
 
+<p>
+    <a href="{% url 'record_add' %}">Add New Player</a>
+</p>
+
 {% if page_obj %}
 <table border="1">
     <thead>
@@ -22,7 +26,11 @@
         {% for record in page_obj %}
         <tr>
             <td>{{ record.id }}</td>
-            <td>{{ record.name }}</td>
+            <td>
+                <a href="{% url 'record_detail' record.pk %}">
+                    {{ record.name }}
+                </a>
+            </td>
             <td>{{ record.nationality }}</td>
             <td>{{ record.team }}</td>
             <td>{{ record.rating }}</td>
@@ -44,11 +52,14 @@
         <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
     {% endif %}
 
-    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
 
     {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}">Next</a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
     {% endif %}
 </div>
+
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Player Detail{% endblock %}
+
+{% block content %}
+<h1>{{ record.name }}</h1>
+
+<p><strong>Nationality:</strong> {{ record.nationality }}</p>
+<p><strong>Team:</strong> {{ record.team }}</p>
+<p><strong>Rating:</strong> {{ record.rating }}</p>
+<p><strong>Age:</strong> {{ record.age }}</p>
+<p><strong>Level:</strong> {{ record.player_level }}</p>
+
+<p><a href="{% url 'record_edit' record.pk %}">Edit</a></p>
+<p><a href="{% url 'record_delete' record.pk %}">Delete</a></p>
+<p><a href="{% url 'record_list' %}">Back to Records</a></p>
+{% endblock %}
