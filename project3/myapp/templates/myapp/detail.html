@@ -22,7 +22,7 @@
 <p><strong>Strength:</strong> {{ record.strength }}</p>
 <p><strong>Level:</strong> {{ record.player_level }}</p>
 
-<p><a href="{% url 'record_edit' record.pk %}">Edit</a></p>
-<p><a href="{% url 'record_delete' record.pk %}">Delete</a></p>
+<a href="{% url 'record_edit' record.id %}" class="btn btn-warning">Edit</a>
+<a href="{% url 'record_delete' record.id %}" class="btn btn-danger">Delete</a>
 <p><a href="{% url 'record_list' %}">Back to Records</a></p>
 {% endblock %}

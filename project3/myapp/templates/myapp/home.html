@@ -3,6 +3,15 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Welcome to the App</h1>
-<p>This is the homepage.</p>
+
+<div class="card shadow">
+    <div class="card-body">
+        <h3 class="card-title">Welcome to the Player Database</h3>
+        <p class="card-text">
+            This app allows you to view, add, edit, and delete player records.
+        </p>
+        <a href="{% url 'record_list' %}" class="btn btn-primary">View Players</a>
+    </div>
+</div>
+
 {% endblock %}

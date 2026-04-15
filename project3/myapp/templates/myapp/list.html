@@ -3,14 +3,11 @@
 {% block title %}Player Records{% endblock %}
 
 {% block content %}
-<h1>Player Records</h1>
 
-<p>
-    <a href="{% url 'record_add' %}">Add New Player</a>
-</p>
+<h1 class="mb-4">Player Records</h1>
 
 {% if page_obj %}
-<table border="1">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>ID</th>
@@ -28,7 +25,7 @@
         <tr>
             <td>{{ record.id }}</td>
             <td>
-                <a href="{% url 'record_detail' record.pk %}">
+                <a href="{% url 'record_detail' record.id %}">
                     {{ record.name }}
                 </a>
             </td>
@@ -36,35 +33,43 @@
             <td>{{ record.team }}</td>
             <td>{{ record.rating }}</td>
             <td>{{ record.age }}</td>
-            <td>{{ record.player_level }}</td>
+            <td>{{ record.level }}</td>
             <td>
-                <a href="{% url 'record_edit' record.pk %}">Edit</a>
-                <a href="{% url 'record_delete' record.pk %}">Delete</a>
+                <a href="{% url 'record_edit' record.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'record_delete' record.id %}" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Pagination -->
+<nav>
+    <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+
 {% else %}
-<p>No records found.</p>
+<p>No records available.</p>
 {% endif %}
-
-<br>
-
-<div>
-    {% if page_obj.has_previous %}
-        <a href="?page=1">First</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-    {% endif %}
-
-    <span>
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </span>
-
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-    {% endif %}
-</div>
 
 {% endblock %}
