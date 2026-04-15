@@ -20,6 +20,7 @@
             <th>Rating</th>
             <th>Age</th>
             <th>Level</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,10 @@
             <td>{{ record.rating }}</td>
             <td>{{ record.age }}</td>
             <td>{{ record.player_level }}</td>
+            <td>
+                <a href="{% url 'record_edit' record.pk %}">Edit</a>
+                <a href="{% url 'record_delete' record.pk %}">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

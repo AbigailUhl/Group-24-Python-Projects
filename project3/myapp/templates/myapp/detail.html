@@ -5,10 +5,21 @@
 {% block content %}
 <h1>{{ record.name }}</h1>
 
+<p><strong>ID:</strong> {{ record.id }}</p>
 <p><strong>Nationality:</strong> {{ record.nationality }}</p>
 <p><strong>Team:</strong> {{ record.team }}</p>
+<p><strong>National Position:</strong> {{ record.national_position }}</p>
+<p><strong>Club Position:</strong> {{ record.club_position }}</p>
 <p><strong>Rating:</strong> {{ record.rating }}</p>
+<p><strong>Height:</strong> {{ record.height }}</p>
+<p><strong>Weight:</strong> {{ record.weight }}</p>
+<p><strong>Birth Date:</strong> {{ record.birth_date }}</p>
 <p><strong>Age:</strong> {{ record.age }}</p>
+<p><strong>Skill Moves:</strong> {{ record.skill_moves }}</p>
+<p><strong>Ball Control:</strong> {{ record.ball_control }}</p>
+<p><strong>Dribbling:</strong> {{ record.dribbling }}</p>
+<p><strong>Speed:</strong> {{ record.speed }}</p>
+<p><strong>Strength:</strong> {{ record.strength }}</p>
 <p><strong>Level:</strong> {{ record.player_level }}</p>
 
 <p><a href="{% url 'record_edit' record.pk %}">Edit</a></p>
