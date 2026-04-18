@@ -24,11 +24,6 @@ class PlayerForm(forms.ModelForm):
             "player_level",
         ]
 
-class PlayerForm(forms.ModelForm):
-    class Meta:
-        model = Player
-        fields = '__all__'
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

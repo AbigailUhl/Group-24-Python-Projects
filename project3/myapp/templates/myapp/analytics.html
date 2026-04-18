@@ -54,14 +54,20 @@
     </div>
 </div>
 
+{{ age_labels|json_script:"age-labels" }}
+{{ speed_values|json_script:"speed-values" }}
+{{ strength_values|json_script:"strength-values" }}
+{{ position_labels|json_script:"position-labels" }}
+{{ position_speed_values|json_script:"position-speed-values" }}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ageLabels = {{ age_labels|default:"[]"|safe }};
-    const speedValues = {{ speed_values|default:"[]"|safe }};
-    const strengthValues = {{ strength_values|default:"[]"|safe }};
+    const ageLabels = JSON.parse(document.getElementById("age-labels").textContent);
+    const speedValues = JSON.parse(document.getElementById("speed-values").textContent);
+    const strengthValues = JSON.parse(document.getElementById("strength-values").textContent);
 
-    const positionLabels = {{ position_labels|default:"[]"|safe }};
-    const positionSpeedValues = {{ position_speed_values|default:"[]"|safe }};
+    const positionLabels = JSON.parse(document.getElementById("position-labels").textContent);
+    const positionSpeedValues = JSON.parse(document.getElementById("position-speed-values").textContent);
 
     new Chart(document.getElementById("ageChart"), {
         type: "line",
@@ -81,7 +87,7 @@
     });
 
     new Chart(document.getElementById("positionChart"), {
-        type: "bar",
+        type: "doughnut",
         data: {
             labels: positionLabels,
             datasets: [

@@ -1,12 +1,13 @@
+import pandas as pd
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Player
 from .forms import PlayerForm
-import json
-import pandas as pd
+
 
 def home(request):
     return render(request, "myapp/home.html")
+
 
 def record_list(request):
     records = Player.objects.all().order_by("id")
@@ -15,9 +16,11 @@ def record_list(request):
     page_obj = paginator.get_page(page_number)
     return render(request, "myapp/list.html", {"page_obj": page_obj})
 
+
 def record_detail(request, pk):
     record = get_object_or_404(Player, pk=pk)
     return render(request, "myapp/detail.html", {"record": record})
+
 
 def record_add(request):
     if request.method == "POST":
@@ -28,7 +31,8 @@ def record_add(request):
     else:
         form = PlayerForm()
 
-    return render(request, "myapp/form.html", {"form": form, "title": "Add Player"})
+    return render(request, "myapp/form.html", {"form": form})
+
 
 def record_edit(request, pk):
     record = get_object_or_404(Player, pk=pk)
@@ -41,7 +45,8 @@ def record_edit(request, pk):
     else:
         form = PlayerForm(instance=record)
 
-    return render(request, "myapp/form.html", {"form": form, "title": "Edit Player"})
+    return render(request, "myapp/form.html", {"form": form})
+
 
 def record_delete(request, pk):
     record = get_object_or_404(Player, pk=pk)
@@ -51,6 +56,7 @@ def record_delete(request, pk):
         return redirect("record_list")
 
     return render(request, "myapp/confirm_delete.html", {"record": record})
+
 
 def analytics(request):
     records = Player.objects.values(
@@ -65,11 +71,11 @@ def analytics(request):
 
     if df.empty:
         context = {
-            "age_labels": json.dumps([]),
-            "speed_values": json.dumps([]),
-            "strength_values": json.dumps([]),
-            "position_labels": json.dumps([]),
-            "position_speed_values": json.dumps([]),
+            "age_labels": [],
+            "speed_values": [],
+            "strength_values": [],
+            "position_labels": [],
+            "position_speed_values": [],
             "summary_stats": [],
         }
         return render(request, "myapp/analytics.html", context)
@@ -110,11 +116,11 @@ def analytics(request):
     ]
 
     context = {
-        "age_labels": json.dumps(list(age_data.index)),
-        "speed_values": json.dumps([round(x, 2) for x in age_data["speed"]]),
-        "strength_values": json.dumps([round(x, 2) for x in age_data["strength"]]),
-        "position_labels": json.dumps(list(position_data.index)),
-        "position_speed_values": json.dumps([round(x, 2) for x in position_data.values]),
+        "age_labels": list(age_data.index),
+        "speed_values": [round(x, 2) for x in age_data["speed"]],
+        "strength_values": [round(x, 2) for x in age_data["strength"]],
+        "position_labels": list(position_data.index),
+        "position_speed_values": [round(x, 2) for x in position_data.values],
         "summary_stats": summary_stats,
     }
 

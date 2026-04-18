@@ -1,28 +1,33 @@
 {% extends "myapp/base.html" %}
 
-{% block title %}Player Detail{% endblock %}
+{% block title %}Player Details{% endblock %}
 
 {% block content %}
-<h1>{{ record.name }}</h1>
+<div class="row justify-content-center">
+    <div class="col-md-6">
 
-<p><strong>ID:</strong> {{ record.id }}</p>
-<p><strong>Nationality:</strong> {{ record.nationality }}</p>
-<p><strong>Team:</strong> {{ record.team }}</p>
-<p><strong>National Position:</strong> {{ record.national_position }}</p>
-<p><strong>Club Position:</strong> {{ record.club_position }}</p>
-<p><strong>Rating:</strong> {{ record.rating }}</p>
-<p><strong>Height:</strong> {{ record.height }}</p>
-<p><strong>Weight:</strong> {{ record.weight }}</p>
-<p><strong>Birth Date:</strong> {{ record.birth_date }}</p>
-<p><strong>Age:</strong> {{ record.age }}</p>
-<p><strong>Skill Moves:</strong> {{ record.skill_moves }}</p>
-<p><strong>Ball Control:</strong> {{ record.ball_control }}</p>
-<p><strong>Dribbling:</strong> {{ record.dribbling }}</p>
-<p><strong>Speed:</strong> {{ record.speed }}</p>
-<p><strong>Strength:</strong> {{ record.strength }}</p>
-<p><strong>Level:</strong> {{ record.player_level }}</p>
+        <div class="card shadow">
+            <div class="card-header">
+                <h3 class="mb-0">{{ record.name }}</h3>
+            </div>
 
-<a href="{% url 'record_edit' record.id %}" class="btn btn-warning">Edit</a>
-<a href="{% url 'record_delete' record.id %}" class="btn btn-danger">Delete</a>
-<p><a href="{% url 'record_list' %}">Back to Records</a></p>
+            <div class="card-body">
+                <p><strong>Nationality:</strong> {{ record.nationality }}</p>
+                <p><strong>Team:</strong> {{ record.team }}</p>
+                <p><strong>Rating:</strong> {{ record.rating }}</p>
+                <p><strong>Age:</strong> {{ record.age }}</p>
+                <p><strong>Level:</strong> {{ record.player_level }}</p>
+                <p><strong>Speed:</strong> {{ record.speed }}</p>
+                <p><strong>Strength:</strong> {{ record.strength }}</p>
+            </div>
+
+            <div class="card-footer text-end">
+                <a href="{% url 'record_edit' record.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'record_delete' record.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'record_list' %}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
