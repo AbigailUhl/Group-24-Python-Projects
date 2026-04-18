@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Player
 from .forms import PlayerForm
+import json
+import pandas as pd
 
 def home(request):
     return render(request, "myapp/home.html")
@@ -49,3 +51,71 @@ def record_delete(request, pk):
         return redirect("record_list")
 
     return render(request, "myapp/confirm_delete.html", {"record": record})
+
+def analytics(request):
+    records = Player.objects.values(
+        "age",
+        "speed",
+        "strength",
+        "club_position",
+        "rating",
+    )
+
+    df = pd.DataFrame(list(records))
+
+    if df.empty:
+        context = {
+            "age_labels": json.dumps([]),
+            "speed_values": json.dumps([]),
+            "strength_values": json.dumps([]),
+            "position_labels": json.dumps([]),
+            "position_speed_values": json.dumps([]),
+            "summary_stats": [],
+        }
+        return render(request, "myapp/analytics.html", context)
+
+    df = df.dropna(subset=["age", "speed", "strength", "club_position", "rating"])
+
+    age_data = df.groupby("age")[["speed", "strength"]].mean().sort_index()
+
+    position_data = (
+        df.groupby("club_position")["speed"]
+        .mean()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+
+    summary_stats = [
+        {
+            "field": "Rating",
+            "count": int(df["rating"].count()),
+            "mean": round(df["rating"].mean(), 2),
+            "min": int(df["rating"].min()),
+            "max": int(df["rating"].max()),
+        },
+        {
+            "field": "Speed",
+            "count": int(df["speed"].count()),
+            "mean": round(df["speed"].mean(), 2),
+            "min": int(df["speed"].min()),
+            "max": int(df["speed"].max()),
+        },
+        {
+            "field": "Strength",
+            "count": int(df["strength"].count()),
+            "mean": round(df["strength"].mean(), 2),
+            "min": int(df["strength"].min()),
+            "max": int(df["strength"].max()),
+        },
+    ]
+
+    context = {
+        "age_labels": json.dumps(list(age_data.index)),
+        "speed_values": json.dumps([round(x, 2) for x in age_data["speed"]]),
+        "strength_values": json.dumps([round(x, 2) for x in age_data["strength"]]),
+        "position_labels": json.dumps(list(position_data.index)),
+        "position_speed_values": json.dumps([round(x, 2) for x in position_data.values]),
+        "summary_stats": summary_stats,
+    }
+
+    return render(request, "myapp/analytics.html", context)

@@ -1,0 +1,96 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Analytics Dashboard</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h4 mb-3">Summary Statistics</h2>
+
+        {% if summary_stats %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Count</th>
+                        <th>Mean</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in summary_stats %}
+                    <tr>
+                        <td>{{ row.field }}</td>
+                        <td>{{ row.count }}</td>
+                        <td>{{ row.mean }}</td>
+                        <td>{{ row.min }}</td>
+                        <td>{{ row.max }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No analytics data available.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h4 mb-3">How Speed and Strength Change With Age</h2>
+        <canvas id="ageChart"></canvas>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h4 mb-3">Top Club Positions by Average Speed</h2>
+        <canvas id="positionChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ageLabels = {{ age_labels|default:"[]"|safe }};
+    const speedValues = {{ speed_values|default:"[]"|safe }};
+    const strengthValues = {{ strength_values|default:"[]"|safe }};
+
+    const positionLabels = {{ position_labels|default:"[]"|safe }};
+    const positionSpeedValues = {{ position_speed_values|default:"[]"|safe }};
+
+    new Chart(document.getElementById("ageChart"), {
+        type: "line",
+        data: {
+            labels: ageLabels,
+            datasets: [
+                {
+                    label: "Average Speed",
+                    data: speedValues
+                },
+                {
+                    label: "Average Strength",
+                    data: strengthValues
+                }
+            ]
+        }
+    });
+
+    new Chart(document.getElementById("positionChart"), {
+        type: "bar",
+        data: {
+            labels: positionLabels,
+            datasets: [
+                {
+                    label: "Average Speed",
+                    data: positionSpeedValues
+                }
+            ]
+        }
+    });
+</script>
+{% endblock %}
