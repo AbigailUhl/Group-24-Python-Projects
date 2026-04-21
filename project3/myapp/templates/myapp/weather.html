@@ -59,13 +59,19 @@
     </div>
 </div>
 
+{{ dates|json_script:"weather-dates" }}
+{{ max_temps|json_script:"weather-max-temps" }}
+{{ min_temps|json_script:"weather-min-temps" }}
+{{ cities|json_script:"weather-cities" }}
+{{ precipitation|json_script:"weather-precipitation" }}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const dates = {{ dates|safe }};
-    const maxTemps = {{ max_temps|safe }};
-    const minTemps = {{ min_temps|safe }};
-    const cities = {{ cities|safe }};
-    const precipitation = {{ precipitation|safe }};
+    const dates = JSON.parse(document.getElementById("weather-dates").textContent);
+    const maxTemps = JSON.parse(document.getElementById("weather-max-temps").textContent);
+    const minTemps = JSON.parse(document.getElementById("weather-min-temps").textContent);
+    const cities = JSON.parse(document.getElementById("weather-cities").textContent);
+    const precipitation = JSON.parse(document.getElementById("weather-precipitation").textContent);
 
     new Chart(document.getElementById("tempChart"), {
         type: "line",

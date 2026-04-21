@@ -1,9 +1,6 @@
-# FIFA Player Data Web Application (Django Project)
+# Data Web Application (Django Project)
 
-## Group Members
-- [Your Name]
-- [Teammate Name]
-- [Teammate Name]
+## By Abigail Uhl ATU22
 
 ## Project Description
 This project is a full-stack Django web application that analyzes FIFA player data.  
@@ -46,16 +43,23 @@ The application integrates:
 `git clone https://github.com/AbigailUhl/Group-24-Python-Projects'
 'cd project3'
 
-### 2. Install dependencies
-'pip install -r requirements.txt'
+## 2. Create virtual enviornment
+'python3 -m venv venv'
+'source venv/bin/activate'
 
-### 3. Run migrations
+### 3. Install dependencies
+'pip3 install -r requirements.txt'
+
+### 4. Run migrations
 'python3 manage.py migrate'
 
-### 4. Load intitial dataset
+### 5. Load intitial dataset
 'python3 manage.py seed_data'
 
-### 5. Open browser
+### 6. Run development server
+'python3 manage.py runserver'
+
+### 7. Open browser
 'http://127.0.0.1:8000/'
 
 ## Screenshots
