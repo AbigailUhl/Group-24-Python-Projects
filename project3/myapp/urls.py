@@ -9,4 +9,6 @@ urlpatterns = [
     path("records/<int:pk>/edit/", views.record_edit, name="record_edit"),
     path("records/<int:pk>/delete/", views.record_delete, name="record_delete"),
     path("analytics/", views.analytics, name="analytics"),
+    path("weather/", views.weather_analytics, name="weather_analytics"),
+    path("fetch/", views.fetch_data_view, name="fetch_data"),
 ]

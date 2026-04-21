@@ -1,8 +1,12 @@
 import pandas as pd
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from .models import Player
+from .models import Player, WeatherRecord
 from .forms import PlayerForm
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.management import call_command
+from django.http import HttpResponseNotAllowed
 
 
 def home(request):
@@ -125,3 +129,65 @@ def analytics(request):
     }
 
     return render(request, "myapp/analytics.html", context)
+
+def weather_analytics(request):
+    records = WeatherRecord.objects.values(
+        "city",
+        "date",
+        "temperature_max",
+        "temperature_min",
+        "precipitation_sum",
+    )
+
+    df = pd.DataFrame(list(records))
+
+    if df.empty:
+        context = {
+            "dates": json.dumps([]),
+            "max_temps": json.dumps([]),
+            "min_temps": json.dumps([]),
+            "cities": json.dumps([]),
+            "precipitation": json.dumps([]),
+            "summary": [],
+        }
+        return render(request, "myapp/weather.html", context)
+
+    temp_by_date = df.groupby("date")[["temperature_max", "temperature_min"]].mean().reset_index()
+    precip_by_city = df.groupby("city")["precipitation_sum"].mean().reset_index()
+
+    summary = [
+        {
+            "field": "Max Temperature",
+            "count": int(df["temperature_max"].count()),
+            "mean": round(df["temperature_max"].mean(), 2),
+            "min": round(df["temperature_max"].min(), 2),
+            "max": round(df["temperature_max"].max(), 2),
+        },
+        {
+            "field": "Min Temperature",
+            "count": int(df["temperature_min"].count()),
+            "mean": round(df["temperature_min"].mean(), 2),
+            "min": round(df["temperature_min"].min(), 2),
+            "max": round(df["temperature_min"].max(), 2),
+        },
+    ]
+
+    context = {
+        "dates": json.dumps([str(date) for date in temp_by_date["date"]]),
+        "max_temps": json.dumps(temp_by_date["temperature_max"].round(2).tolist()),
+        "min_temps": json.dumps(temp_by_date["temperature_min"].round(2).tolist()),
+        "cities": json.dumps(precip_by_city["city"].tolist()),
+        "precipitation": json.dumps(precip_by_city["precipitation_sum"].round(2).tolist()),
+        "summary": summary,
+    }
+
+    return render(request, "myapp/weather.html", context)
+
+
+@staff_member_required
+def fetch_data_view(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    call_command("fetch_data")
+    return redirect("weather_analytics")

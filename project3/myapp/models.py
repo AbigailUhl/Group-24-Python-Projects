@@ -46,3 +46,16 @@ class Player(models.Model):
 
     def __str__(self):
         return self.name
+
+class WeatherRecord(models.Model):
+    city = models.CharField(max_length=100)
+    date = models.DateField()
+    temperature_max = models.FloatField(null=True, blank=True)
+    temperature_min = models.FloatField(null=True, blank=True)
+    precipitation_sum = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ("city", "date")
+
+    def __str__(self):
+        return f"{self.city} - {self.date}"
