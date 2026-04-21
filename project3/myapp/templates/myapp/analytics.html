@@ -42,32 +42,36 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <h2 class="h4 mb-3">How Speed and Strength Change With Age</h2>
+        <h2 class="h4 mb-3">How do player physical attributes (speed and strength) change with age?</h2>
         <canvas id="ageChart"></canvas>
     </div>
 </div>
 
 <div class="card mb-4">
     <div class="card-body">
-        <h2 class="h4 mb-3">Top Club Positions by Average Speed</h2>
+        <h2 class="h4 mb-3">Which club positions have the highest average speed?</h2>
         <canvas id="positionChart"></canvas>
     </div>
 </div>
 
-{{ age_labels|json_script:"age-labels" }}
-{{ speed_values|json_script:"speed-values" }}
-{{ strength_values|json_script:"strength-values" }}
-{{ position_labels|json_script:"position-labels" }}
-{{ position_speed_values|json_script:"position-speed-values" }}
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h4 mb-3">What is the distribution of player ratings?</h2>
+        <canvas id="ratingChart"></canvas>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ageLabels = JSON.parse(document.getElementById("age-labels").textContent);
-    const speedValues = JSON.parse(document.getElementById("speed-values").textContent);
-    const strengthValues = JSON.parse(document.getElementById("strength-values").textContent);
+    const ageLabels = JSON.parse('{{ age_labels|safe }}');
+    const speedValues = JSON.parse('{{ speed_values|safe }}');
+    const strengthValues = JSON.parse('{{ strength_values|safe }}');
 
-    const positionLabels = JSON.parse(document.getElementById("position-labels").textContent);
-    const positionSpeedValues = JSON.parse(document.getElementById("position-speed-values").textContent);
+    const positionLabels = JSON.parse('{{ position_labels|safe }}');
+    const positionSpeedValues = JSON.parse('{{ position_speed_values|safe }}');
+
+    const ratingLabels = JSON.parse('{{ rating_labels|safe }}');
+    const ratingCounts = JSON.parse('{{ rating_counts|safe }}');
 
     new Chart(document.getElementById("ageChart"), {
         type: "line",
@@ -76,26 +80,57 @@
             datasets: [
                 {
                     label: "Average Speed",
-                    data: speedValues
+                    data: speedValues,
+                    borderWidth: 2
                 },
                 {
                     label: "Average Strength",
-                    data: strengthValues
+                    data: strengthValues,
+                    borderWidth: 2
                 }
             ]
+        },
+        options: {
+            responsive: true
         }
     });
 
     new Chart(document.getElementById("positionChart"), {
-        type: "doughnut",
+        type: "radar",
         data: {
             labels: positionLabels,
             datasets: [
                 {
-                    label: "Average Speed",
-                    data: positionSpeedValues
+                    label: "Average Speed by Position",
+                    data: positionSpeedValues,
+                    borderWidth: 2
                 }
             ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("ratingChart"), {
+        type: "bar",
+        data: {
+            labels: ratingLabels,
+            datasets: [
+                {
+                    label: "Number of Players",
+                    data: ratingCounts,
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true
         }
     });
 </script>

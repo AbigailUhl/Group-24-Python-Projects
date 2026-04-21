@@ -61,7 +61,6 @@ def record_delete(request, pk):
 
     return render(request, "myapp/confirm_delete.html", {"record": record})
 
-
 def analytics(request):
     records = Player.objects.values(
         "age",
@@ -75,24 +74,46 @@ def analytics(request):
 
     if df.empty:
         context = {
-            "age_labels": [],
-            "speed_values": [],
-            "strength_values": [],
-            "position_labels": [],
-            "position_speed_values": [],
+            "age_labels": json.dumps([]),
+            "speed_values": json.dumps([]),
+            "strength_values": json.dumps([]),
+            "position_labels": json.dumps([]),
+            "position_speed_values": json.dumps([]),
+            "rating_labels": json.dumps([]),
+            "rating_counts": json.dumps([]),
             "summary_stats": [],
         }
         return render(request, "myapp/analytics.html", context)
 
     df = df.dropna(subset=["age", "speed", "strength", "club_position", "rating"])
 
-    age_data = df.groupby("age")[["speed", "strength"]].mean().sort_index()
+    age_data = (
+        df.groupby("age")[["speed", "strength"]]
+        .mean()
+        .sort_index()
+    )
 
     position_data = (
-        df.groupby("club_position")["speed"]
-        .mean()
-        .sort_values(ascending=False)
-        .head(10)
+        df.groupby("club_position")
+        .agg(
+            player_count=("club_position", "count"),
+            avg_speed=("speed", "mean")
+        )
+        .reset_index()
+    )
+
+    position_data = position_data[
+        (position_data["club_position"] != "Sub") &
+        (position_data["club_position"] != "Res")
+    ]
+
+    position_data = position_data[position_data["player_count"] >= 20]
+    position_data = position_data.sort_values("avg_speed", ascending=False)
+
+    rating_data = (
+        df.groupby("rating")
+        .size()
+        .sort_index()
     )
 
     summary_stats = [
@@ -120,11 +141,16 @@ def analytics(request):
     ]
 
     context = {
-        "age_labels": list(age_data.index),
-        "speed_values": [round(x, 2) for x in age_data["speed"]],
-        "strength_values": [round(x, 2) for x in age_data["strength"]],
-        "position_labels": list(position_data.index),
-        "position_speed_values": [round(x, 2) for x in position_data.values],
+        "age_labels": json.dumps(age_data.index.tolist()),
+        "speed_values": json.dumps([round(x, 2) for x in age_data["speed"].tolist()]),
+        "strength_values": json.dumps([round(x, 2) for x in age_data["strength"].tolist()]),
+
+        "position_labels": json.dumps(position_data["club_position"].tolist()),
+        "position_speed_values": json.dumps([round(x, 2) for x in position_data["avg_speed"].tolist()]),
+
+        "rating_labels": json.dumps(rating_data.index.tolist()),
+        "rating_counts": json.dumps(rating_data.tolist()),
+
         "summary_stats": summary_stats,
     }
 
